@@ -7,6 +7,12 @@
 node_modules/
 dist/
 
+# python venv
+myvenv/*
+
+# pycache
+__pycache__/*
+
 # Compiled Java class files
 *.class
 
