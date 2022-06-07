@@ -7,10 +7,9 @@ import requests
 import log as log
 
 # Variables
-adapterId = 'test'
-# adapterId = 'testDevice'
-myPid = 'temp'
 agentUrl = 'http://localhost:81'
+adapterId = 'testDevice'
+myPid = 'temp'
 myOid = None
 
 # Initialize logger
@@ -37,7 +36,7 @@ async def getData(oid: str, pid: str) -> int:
 async def startup_event():
     global myOid, myPid
     response = requests.get(agentUrl +'/api/registration/oid/'+ adapterId)
-    if(response.status_code == 200):
+    if(response.status_code == 200 and response.json()['message'] != None):
         myOid = response.json()['message']
         logger.info('Adapter listening to OID: ' + myOid + ' PID: ' + myPid)
     else:
