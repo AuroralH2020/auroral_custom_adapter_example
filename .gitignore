@@ -13,6 +13,9 @@ myvenv/
 # pycache
 __pycache__/*
 
+#python
+myenv/*
+
 # Compiled Java class files
 *.class
 
