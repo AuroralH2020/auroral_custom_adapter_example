@@ -1,19 +1,13 @@
-
-import string
+from curses import has_key
+from log import setup_custom_logger
 from fastapi import FastAPI, HTTPException
+from agent import getOidByAdapterId, getRegistration
 from models import ErrorMessage
 from dataSource import getDummyData
-import requests
-import log as log
+from config import config, Item
 
-# Variables
-agentUrl = 'http://localhost:81'
-adapterId = 'testDevice'
-myPid = 'temp'
-myOid = None
-
-# Initialize logger
-logger = log.setup_custom_logger('root')
+# Init logger
+logger = setup_custom_logger('default')
 
 app = FastAPI(    
     title="AUROAL Custom adapter example",
@@ -24,21 +18,24 @@ app = FastAPI(
         "url": "https://opensource.org/licenses/MIT",
     })
 
+# On request
 @app.get("/api/property/{oid}/{pid}", response_model=int, tags=["AuroralAgentAPI"], responses={404: {"model": ErrorMessage}})
 async def getData(oid: str, pid: str) -> int:
     logger.info('Request:  OID: ' + oid + ' PID: ' + pid)
-    if oid == myOid and pid == myPid:
+    if config.myItems[oid] is not None and pid in config.myItems[oid].pids:
         return getDummyData(oid, pid)
     else:
         raise HTTPException(status_code=404, detail="Device not found")
 
+# On startup
 @app.on_event("startup")
 async def startup_event():
     global myOid, myPid
-    response = requests.get(agentUrl +'/api/registration/oid/'+ adapterId)
-    if(response.status_code == 200 and response.json()['message'] != None):
-        myOid = response.json()['message']
-        logger.info('Adapter listening to OID: ' + myOid + ' PID: ' + myPid)
-    else:
-        logger.error('Error: Object with adapterId'+ adapterId +' does not exists')
-    
+    # get OIDs and PIDs from Agent
+    for a in config.adapterIds:
+        oid = getOidByAdapterId(a)
+        item = getRegistration(oid) if oid is not None else None
+        pids = item.get('properties') if item is not None else None
+        if pids is not None:
+            logger.info('Listening on OID: ' + oid + ' PIDs: ' + str(pids))
+            config.myItems[oid] = Item(oid, a, pids)
