@@ -1,26 +1,41 @@
-# Company API
+# Auroral custom adapter example
+This is basicimplementation of custom adapter with Auroral agent
+## Instalation and first run
+ There are several ways how to run this adapter. We will describe running in python virtual enviroment and running inside docker:
 
-## Virtual env instructions
+### Python virtual env
+- Create venv: 	
+```python3 -m venv myenv```
+- Activate venv:
+```source myenv/bin/activate```
+- Start adapter:
+```uvicorn main:app  --port 4444```
+- Stop adapter:
+```Ctrl + C ```
+- Deactivate:
+ ```deactivate```
+ - Export requirements:
+ ```pip freeze > requirements.txt```
+ - Install requirements
+ ```pip install -r requirements.txt```
+ ### Docker 
+ - Building image:
+ ```docker build -t customAdapter .```
+ - Running docker container: 
+  ```docker run -d --name MyAdapter -p 4444:4444 customAdapter```
 
-1. Create
+## Configuration
+Example configuration is stored in *env.example* file. Please copy it to file named *.env* and make required changes. 
+```
+AGENT_URL="http://localhost"
+AGENT_PORT=81
+ADAPTER_IDS="testAdapter1, testAdapter2"
+```
+*AGENT_URL* and *AGENT_PORT* defines where your Auroral AGENT is accessable from Adapter. 
+*ADAPTER_IDS* defines which objects registered in Agent should be  maintained in this adapter
 
-    python3 -m venv myenv
+## Who do I talk to? ##
 
-2. Activate
-
-    source myenv/bin/activate
-
-3. Deactivate
-
-    deactivate
-
-## How to start it
-
-* Start API
-    source myenv/bin/activate  
-    uvicorn main:app --reload --port 4444
-
-## How to create requirements
-    
-* pip freeze > requirements.txt
-* pip install -r requirements.txt
+Developed by bAvenir
+* jorge.almela@bavenir.eu
+* peter.drahovsky@bavenir.eu
