@@ -13,18 +13,17 @@ This is basicimplementation of custom adapter with Auroral agent
 - Stop adapter:
 ```Ctrl + C ```
 - Deactivate:
- ```deactivate```
- - Export requirements:
- ```pip freeze > requirements.txt```
- - Install requirements
- ```pip install -r requirements.txt```
- ### Docker 
- - Building image:
- ```docker build -t customAdapter .```
- - Running docker container: 
-  ```docker run -d --name MyAdapter -p 4444:4444 customAdapter```
-
-## Configuration
+```deactivate```
+- Export requirements:
+```pip freeze > requirements.txt```
+- Install requirements
+```pip install -r requirements.txt```
+### Docker ###
+- Building image:
+```docker build -t customAdapter .```
+- Running docker container:
+```docker run -d --name MyAdapter -p 4444:4444 customAdapter```
+## Configuration ##
 Example configuration is stored in *env.example* file. Please copy it to file named *.env* and make required changes. 
 ```
 AGENT_URL="http://localhost"
